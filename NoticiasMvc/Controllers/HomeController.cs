@@ -1,18 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NoticiasMvc.Models;
+using NoticiasMvc.Settings;
 using System.Diagnostics;
 
 namespace NoticiasMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string apiKey = "79ee7c463b0d49069a886c1b2e139d8a";
+        private readonly string _apiKey;
         private readonly string apiUrl = "https://newsapi.org/v2/everything?q=education";
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IOptions<NewsApiSettings> apiSettings, ILogger<HomeController> logger)
         {
+            _apiKey = apiSettings.Value.ChaveApi;
             _logger = logger;
         }
 
@@ -20,7 +23,7 @@ namespace NoticiasMvc.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
+                httpClient.DefaultRequestHeaders.Add("x-api-key", _apiKey);
                 httpClient.DefaultRequestHeaders.Add("User-Agent", "NoticiasMVC");
 
                 using (var response = await httpClient.GetAsync(apiUrl))

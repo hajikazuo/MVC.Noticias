@@ -1,7 +1,11 @@
+using NoticiasMvc.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<NewsApiSettings>(builder.Configuration.GetSection("NewsApi"));
 
 var app = builder.Build();
 

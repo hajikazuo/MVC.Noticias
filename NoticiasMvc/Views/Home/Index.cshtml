@@ -13,23 +13,28 @@
     </div>
 
     <div class="row gx-5">
-    @foreach (var article in Model)
-    {
+        @foreach (var article in Model)
+        {
             <div class="col-lg-4 mb-5">
                 <div class="card h-100 shadow border-0">
-            @if (!string.IsNullOrEmpty(article.UrlToImage))
-            {
+                    @if (!string.IsNullOrEmpty(article.UrlToImage))
+                    {
                         <img src="@article.UrlToImage" class="card-img-top" alt="@article.Title">
-            }
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="@article.Title">
+
+                    }
                     <div class="card-body p-4">
-                <h5 class="card-title">@article.Title</h5>
-                <p class="card-text">@article.Description</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-                <p class="card-text">@article.publishedAt</p>
+                        <h5 class="card-title">@article.Title</h5>
+                        <p class="card-text">@article.Description</p>
+                        <a href="@article.Url" class="btn btn-primary" target="_blank">Learn More</a>
+                        <p class="card-text">@article.publishedAt</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
-    }
+        }
     </div>
 
 </body>
