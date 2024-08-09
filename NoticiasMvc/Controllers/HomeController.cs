@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NoticiasMvc.Models;
+using NoticiasMvc.Services.Interfaces;
 using NoticiasMvc.Settings;
 using System.Diagnostics;
 
@@ -9,32 +10,20 @@ namespace NoticiasMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string _apiKey;
-        private readonly string apiUrl = "https://newsapi.org/v2/everything?q=education";
+        private readonly INewsService _newsService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IOptions<NewsApiSettings> apiSettings, ILogger<HomeController> logger)
+        public HomeController(INewsService newsService, ILogger<HomeController> logger)
         {
-            _apiKey = apiSettings.Value.ChaveApi;
+            _newsService = newsService; 
             _logger = logger;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(Category category)
         {
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Add("x-api-key", _apiKey);
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "NoticiasMVC");
+            var News = await _newsService.GetNewsAsync(null);   
 
-                using (var response = await httpClient.GetAsync(apiUrl))
-                {
-                    string responseData = await response.Content.ReadAsStringAsync();
-
-                    var articlesResponse = JsonConvert.DeserializeObject<ArticlesResponse>(responseData);
-
-                    return View(articlesResponse.Articles);
-                }
-            }
+            return View(News);            
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
