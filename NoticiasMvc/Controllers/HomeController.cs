@@ -19,9 +19,9 @@ namespace NoticiasMvc.Controllers
             _logger = logger;
         }
 
-        public async Task<ActionResult> Index(Category category)
+        public async Task<ActionResult> Index()
         {
-            var News = await _newsService.GetNewsAsync(null);   
+            var News = await _newsService.GetNewsAsync();   
 
             return View(News);            
         }

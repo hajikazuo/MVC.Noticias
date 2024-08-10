@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NoticiasMvc.Models;
 using NoticiasMvc.Services.Interfaces;
 using NoticiasMvc.Settings;
+using NoticiasMvc.ViewModels;
 
 namespace NoticiasMvc.Services
 {
@@ -15,11 +16,10 @@ namespace NoticiasMvc.Services
             _apiKey = apiSettings.Value.ChaveApi;
         }
 
-        public async Task<List<Article>> GetNewsAsync(Category? category = null)
+        public async Task<List<Article>> GetNewsAsync()
         {
-            var categoryToUse = category ?? Category.technology;
-
-            var apiUrl = "https://newsapi.org/v2/everything?q=" + categoryToUse;
+           
+            var apiUrl = "https://newsapi.org/v2/everything?q=technology";
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("x-api-key", _apiKey);
@@ -29,7 +29,7 @@ namespace NoticiasMvc.Services
                 {
                     string responseData = await response.Content.ReadAsStringAsync();
 
-                    var articlesResponse = JsonConvert.DeserializeObject<ArticlesResponse>(responseData);
+                    var articlesResponse = JsonConvert.DeserializeObject<ArticlesResponseViewModel>(responseData);
 
                     return articlesResponse.Articles;
                 }

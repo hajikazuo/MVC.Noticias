@@ -4,6 +4,6 @@ namespace NoticiasMvc.Services.Interfaces
 {
     public interface INewsService
     {
-        Task<List<Article>> GetNewsAsync(Category? category);
+        Task<List<Article>> GetNewsAsync();
     }
 }
